@@ -16,7 +16,7 @@
             // - clean, restore and rebuild Nez.FNA.sln (nuget restore Nez.FNA)
             "label": "Update, Restore and Rebuild Nez",
             "type": "shell",
-            "command": "git submodule foreach --recursive git pull && msbuild Nez/Nez.sln '/t:clean;restore;build' && msbuild Nez/Nez.FNA.sln '/t:clean;restore;build'",
+            "command": "git submodule foreach --recursive git pull && msbuild Nez/Nez.sln /t:clean /t:restore && msbuild Nez/Nez.FNA.sln /t:clean /t:restore",
             "group": "build",
             "problemMatcher": "$msCompile",
             "presentation": {
@@ -32,7 +32,7 @@
         {
             "label": "Clean Project",
             "type": "shell",
-            "command": "msbuild project_name /t:clean /p:configuration=Debug ; msbuild project_name /t:clean /p:configuration=Release",
+            "command": "msbuild project_name /t:clean /p:configuration=Debug && msbuild project_name /t:clean /p:configuration=Release",
             "group": "build",
             "problemMatcher": "$msCompile",
         },
@@ -42,8 +42,9 @@
             "type": "shell",
             "command": "msbuild",
             "args": [
-                "project_name",
+                "project_name.sln",
                 "/p:configuration=Debug",
+                "/p:platform=Any CPU",
                 "/t:build"
             ],
             "group": "build",
@@ -51,13 +52,15 @@
 			"dependsOn": "Build Content",
         },
 
+        //Confused how release works with this template by default, no release config seems to be setup in the sln
         {
             "label": "Build (Release)",
             "type": "shell",
             "command": "msbuild",
             "args": [
-                "project_name",
+                "project_name.sln",
                 "/p:configuration=Release",
+                "/p:platform=Any CPU",
                 "/t:build"
             ],
             "group": "build",
@@ -105,7 +108,7 @@
             "type": "shell",
             "group": "build",
             "osx":{
-                "command": "${workspaceFolder}/.vscode/buildEffects.sh"
+                "command": "${workspaceFolder}/.vscode/buildEffects.ps1"
             },
             "windows":{
                 "command": "& ${workspaceFolder}/.vscode/buildEffects.ps1"
@@ -124,7 +127,8 @@
             "problemMatcher": "$msCompile"
         },
 
-        {
+        //I dont fully understand this function or how to replicate on windows.
+      /*   {
             "label": "Force Build Content",
             "type": "shell",
             "group": "build",
@@ -133,20 +137,20 @@
                 "cwd": "${workspaceFolder}/project_name/CompiledContent"
             },
             "problemMatcher": "$msCompile"
-        },
+        }, */
 
         {
             "label": "Open Pipeline Tool",
             "type": "shell",
             "group": "build",
-            "command": "export MONOGAME_PIPELINE_PROJECT=${workspaceFolder}/project_name/CompiledContent/Content.mgcb && /Applications/Pipeline.app/Contents/MacOS/Pipeline",
+            "command": "${workspaceFolder}/lucid/CompiledContent/Content.mgcb",
             "problemMatcher": "$msCompile"
         },
 		
         {
             "label": "Process T4 Templates",
             "type": "shell",
-            "command": "${workspaceFolder}/.vscode/processT4Templates.sh",
+            "command": "${workspaceFolder}/.vscode/processT4Templates.ps1",
             "group": "build",
             "problemMatcher": "$msCompile",
         },
