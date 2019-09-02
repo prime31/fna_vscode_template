@@ -14,13 +14,15 @@ namespace project_name
 			
 #if DEBUG
             System.Diagnostics.Debug.Listeners.Add(new System.Diagnostics.TextWriterTraceListener(System.Console.Out));
+
+             // render Nez in the imgui window in debug mode
+			var imGuiManager = new ImGuiManager();
+			Core.registerGlobalManager(imGuiManager);
 #endif
 
             scene = new DefaultScene();
             
-            // optionally render Nez in an ImGui window
-			var imGuiManager = new ImGuiManager();
-			Core.registerGlobalManager(imGuiManager);
+           
         }
     }
 }

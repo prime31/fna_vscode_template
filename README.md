@@ -10,16 +10,18 @@ Start new FNA projects with Nez quickly and easily with handy setup scripts, a v
 
 
 ## Prerequisites ##
-- [Visual Studio Code](https://code.visualstudio.com) or [Visual Studio](https://visualstudio.microsoft.com/) (recommended to use Visual Studio Code because it has some custom tasks but either will work fine)
-  - [Mono Debugger Extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode.mono-debug) (required for macOS debugging)
+- [Visual Studio Code](https://code.visualstudio.com) or [Visual Studio](https://visualstudio.microsoft.com/) (recommended to use Visual Studio Code because it has some custom tasks but either will work fine.)
+- [Mono Debugger Extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode.mono-debug) (required for macOS debugging)
 - [MonoGame](http://www.monogame.net/downloads/) (required for compiling content with the Pipeline tool)
 - (optional) [.NET Core](https://dotnet.microsoft.com/download) (required for compiling T4 templates)
 - (optional) [Microsoft DirectX SDK (June 2010)](https://www.microsoft.com/en-us/download/details.aspx?id=6812) (required for building effects, [you can use Wine to run this](https://github.com/AndrewRussellNet/FNA-Template#linuxmacos-installing-the-directx-sdk-on-wine))
+- (windows only) [7zip](https://www.7-zip.org) (if intending to use fnalibs, the filetype is unsupported for windows and requires 7zip to be installed to decompress/unzip)
+- (windows only) [Build tools for Visual Studio](https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=16)(these build tools are required for all Visual Studio Code build tasks. if you intend to use the full Visual Studio, these are already included. be sure to include .NET Core Build Tools in the installation)
 
 
 ## Setup Instructions ##
 1. Download and unzip the ZIP archive (don't clone the repo!)
-2. Run `./getFNA.sh` (macOS) to download the latest Nez, FNA and fnalibs to the directory. You can run this script again if you want to update either FNA or the fnalibs at a later point.
+2. Run `./getFNA.sh` (macOS) or `./getFNA.ps1` (windows) to download the latest Nez, FNA and fnalibs to the directory. You can run this script again if you want to update either FNA or the fnalibs at a later point.
 3. Open the root folder that contains the .sln file in Visual Studio Code or the .sln file directly in Visual Studio. Note that only Visual Studio Code has an effect builder command.
 
 That's it! Now you're ready to build and run the base project. If you get missing DLL errors (pointing at SDL) when running in Visual Studio copy the FNA libs into your `/usr/local/lib` folder. With Visual Studio Code, `DYLD_LIBRARY_PATH` is set automatically so it won't run into the DLL not found error. Nez is setup as a submodule so you can update it in the normal fashion.

@@ -10,7 +10,7 @@ Set-Location ../project_name
 
 $fxc = "C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Utilities\bin\x86\fxc.exe"
 
-$files = Get-ChildItem -Path "Content\*" -Include *fx
+$files = Get-ChildItem -Path "Content\*" -Recurse -Include *fx 
 
 foreach ($file in $files)
 {

@@ -52,7 +52,6 @@
 			"dependsOn": "Build Content",
         },
 
-        //Confused how release works with this template by default, no release config seems to be setup in the sln
         {
             "label": "Build (Release)",
             "type": "shell",
@@ -75,9 +74,10 @@
                 "command": "DYLD_LIBRARY_PATH=${workspaceFolder}/project_name/bin/Debug/osx/ mono ${workspaceFolder}/project_name/bin/Debug/project_name.exe"
             },
             "windows":{
-                "command": "cmd",
+                "command": "start",
                 "args": [
-                    "/k",
+                    "/wait",
+                    "${workspaceFolder}/project_name/bin/Debug/project_name.exe",
                     "${workspaceFolder}/project_name/bin/Debug/project_name.exe"
                 ]
             },
@@ -93,9 +93,10 @@
                 "command": "DYLD_LIBRARY_PATH=${workspaceFolder}/project_name/bin/Release/osx/ mono ${workspaceFolder}/project_name/bin/Release/project_name.exe"
             },
             "windows":{
-                "command": "cmd",
+                "command": "start",
                 "args": [
-                    "/k",
+                    "/wait",
+                    "${workspaceFolder}/project_name/bin/Release/project_name.exe",
                     "${workspaceFolder}/project_name/bin/Release/project_name.exe"
                 ]
             },
@@ -108,7 +109,7 @@
             "type": "shell",
             "group": "build",
             "osx":{
-                "command": "${workspaceFolder}/.vscode/buildEffects.ps1"
+                "command": "${workspaceFolder}/.vscode/buildEffects.sh"
             },
             "windows":{
                 "command": "& ${workspaceFolder}/.vscode/buildEffects.ps1"
@@ -127,30 +128,48 @@
             "problemMatcher": "$msCompile"
         },
 
-        //I dont fully understand this function or how to replicate on windows.
-      /*   {
+        {
             "label": "Force Build Content",
             "type": "shell",
             "group": "build",
-            "command": "mono /Applications/Pipeline.app/Contents/MonoBundle/MGCB.exe /@:Content.mgcb -r",
+            "osx": {
+                "command": "mono /Applications/Pipeline.app/Contents/MonoBundle/MGCB.exe /@:Content.mgcb -r",
+            },
+            "windows": { 
+                "command":"C:/Program Files (x86)/MSBuild/MonoGame/v3.0/Tools/MGCB.exe", 
+                "args": [
+                    "/@:Content.mgcb",
+                    "-r"
+                ]
+            },
             "options": {
                 "cwd": "${workspaceFolder}/project_name/CompiledContent"
             },
             "problemMatcher": "$msCompile"
-        }, */
+        },
 
         {
             "label": "Open Pipeline Tool",
             "type": "shell",
             "group": "build",
-            "command": "${workspaceFolder}/lucid/CompiledContent/Content.mgcb",
+            "osx": {
+                "command": "export MONOGAME_PIPELINE_PROJECT=${workspaceFolder}/project_name/CompiledContent/Content.mgcb && /Applications/Pipeline.app/Contents/MacOS/Pipeline"
+            },
+            "windows": {
+                "command": "${workspaceFolder}/project_name/CompiledContent/Content.mgcb"
+            },
             "problemMatcher": "$msCompile"
         },
 		
         {
             "label": "Process T4 Templates",
             "type": "shell",
-            "command": "${workspaceFolder}/.vscode/processT4Templates.ps1",
+            "osx": {
+                "command": "${workspaceFolder}/.vscode/processT4Templates.sh"
+            },
+            "windows": {
+                "command": "& ${workspaceFolder}/.vscode/processT4Templates.ps1"
+            },
             "group": "build",
             "problemMatcher": "$msCompile",
         },

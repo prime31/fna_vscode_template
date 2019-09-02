@@ -8,6 +8,7 @@
         <AssemblyName>project_name</AssemblyName>
         <MonoGamePlatform>DesktopGL</MonoGamePlatform>
         <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     </PropertyGroup>
     
     <!-- Reference FNA, Nez, ImGui and Persistence projects. Optionally add a Farseer reference here and in the .sln file -->

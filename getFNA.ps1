@@ -57,13 +57,9 @@ function updateFNA ()
 
 function check7zip ()
 {
-    try 
+    if ((Test-Path "C:\Program Files\7-Zip") -eq 0)
     {
-        7z | Out-Null
-    }
-    catch [System.Management.Automation.CommandNotFoundException]
-    {
-        Write-Output "ERROR: 7Zip is not installed. Please install 7Zip and set PATH Environment Variable and try again."
+        Write-Output "ERROR: 7zip is not installed, please install 7zip and try again."
         exit
     }
 }
@@ -79,10 +75,10 @@ function getLibs ()
     check7zip
     if ((Test-Path "${PSScriptRoot}\fnalibs") -eq 0)
     {
-        7z x "fnalibs.tar.bz2" 
+        & "C:\Program Files\7-Zip\7z.exe" x "fnalibs.tar.bz2"
         if ($? -eq 1){ Remove-Item "fnalibs.tar.bz2"} 
         else { Write-Output "ERROR: Unable to decompress successfully." exit }
-        7z x "fnalibs.tar" -ofnalibs
+        & "C:\Program Files\7-Zip\7z.exe" x "fnalibs.tar" -ofnalibs
         if ($? -eq 1)
         {  
             Remove-Item "fnalibs.tar" 
@@ -93,6 +89,70 @@ function getLibs ()
     
 }
 
+function checkMsbuild ()
+{
+    try { msbuild | Out-Null }
+    catch [System.Management.Automation.CommandNotFoundException] 
+    {
+        Write-Output "ERROR: 'msbuild' is not available. Attempting to look for build tools..."
+        if ((Test-Path "C:\Program Files (x86)\Microsoft Visual Studio") -eq 1) 
+        { 
+            $files = Get-ChildItem -Path "C:\Program Files (x86)\Microsoft Visual Studio\*" -Recurse -Include "msbuild.exe" | Where-Object { (Split-Path (Split-Path $_.FullName -Parent) -Leaf) -like 'bin'}
+            if ($files.Length -gt 0)
+            {
+                if ($files.Length -gt 1)
+                {
+                    Write-Output "Found multiple build tools... unsure which version to use."
+                    for ($i = 0; $i -lt $files.Length; $i++)
+                    {
+                        $filename = $files[$i].FullName
+                        $c = $i + 1
+                        Write-Output "${c}: ${filename}"
+                    }
+                    $max = $files.Length
+                    $choice = Read-Host -Prompt "Choose desired msbuild version? (1-${max})"
+                    if ($choice -le 0 -or $choice -gt $files.Length+1) 
+                    { 
+                        "ERROR: invalid choice, exiting"
+                    }
+
+                    $msbuildpath = Split-Path $files[$choice-1].FullName
+                    Write-Output "your choice was ${choice} which equals this path: ${msbuildpath}. attempting to add to PATH..."
+                    
+                    [Environment]::SetEnvironmentVariable("Path", $env:Path + $msbuildpath, "Machine")
+
+                    Write-Output "Close and run getFNA.ps1 again..."     
+                    exit          
+
+                }
+                else 
+                {
+                    Write-Output "Found build tools, attempting to add to PATH..."
+                    $msbuildpath = Split-Path $files[0].FullName
+                    
+                    [Environment]::SetEnvironmentVariable("Path", $env:Path + $msbuildpath, "Machine")
+
+                    Write-Output "Close and run getFNA.ps1 again..."   
+                    exit            
+                }
+            }
+            else 
+            {
+                Write-Output "ERROR: Build tools for Visual Studio not installed or installed in an unknown location."
+                Write-Output "If you know they are installed somewhere else, please create a PATH Environment Variable for them and retry."
+                exit  
+            }            
+        }
+        else 
+        {
+            Write-Output "ERROR: Build tools for Visual Studio not installed or installed in an unknown location."
+            Write-Output "If you know they are installed somewhere else, please create a PATH Environment Variable for them and retry."
+            exit
+        }
+    }
+}
+
+checkMsbuild
 
 if (Test-Path "${PSScriptRoot}\FNA")
 {
