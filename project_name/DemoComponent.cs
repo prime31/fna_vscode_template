@@ -2,7 +2,7 @@ using ImGuiNET;
 using Nez;
 using Nez.ImGuiTools;
 
-namespace lucid
+namespace project_name
 {
     public class DemoComponent : Component
     {
