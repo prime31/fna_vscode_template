@@ -6,7 +6,9 @@
 
 Write-Output "Starting build process..."
 
+Set-Location $PSScriptRoot
 Set-Location ../project_name
+
 
 $fxc = "C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Utilities\bin\x86\fxc.exe"
 
@@ -20,4 +22,5 @@ foreach ($file in $files)
 
     Write-Output "Built ${fileName}.fx to ${filePath}b"
 }
+
 

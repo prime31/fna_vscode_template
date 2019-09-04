@@ -112,7 +112,11 @@
                 "command": "${workspaceFolder}/.vscode/buildEffects.sh"
             },
             "windows":{
-                "command": "& ${workspaceFolder}/.vscode/buildEffects.ps1"
+                "command": "powershell",
+                "args": [
+                    "-File",
+                    "${workspaceFolder}/.vscode/buildEffects.ps1"
+                ],
             },
             "problemMatcher": "$msCompile"
         },
@@ -168,7 +172,11 @@
                 "command": "${workspaceFolder}/.vscode/processT4Templates.sh"
             },
             "windows": {
-                "command": "& ${workspaceFolder}/.vscode/processT4Templates.ps1"
+                "command": "powershell",
+                "args": [ 
+                    "-File",
+                    "${workspaceFolder}/.vscode/processT4Templates.ps1" 
+                ]
             },
             "group": "build",
             "problemMatcher": "$msCompile",
