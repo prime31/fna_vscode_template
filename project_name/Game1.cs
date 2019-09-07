@@ -17,12 +17,10 @@ namespace project_name
 
              // render Nez in the imgui window in debug mode
 			var imGuiManager = new ImGuiManager();
-			Core.registerGlobalManager(imGuiManager);
+			Core.RegisterGlobalManager(imGuiManager);
 #endif
 
-            scene = new DefaultScene();
-            
-           
+            Scene = new DefaultScene();
         }
     }
 }

@@ -7,15 +7,30 @@
 # Checks if dotnet is installed
 function checkDotnet() 
 {
-    try 
-    {
-        dotnet | Out-Null
-        return 1
-    }
+    try { dotnet | Out-Null }
     catch [System.Management.Automation.CommandNotFoundException]
     {
         Write-Output "ERROR: Dotnet is not installed. Please install dotnet to download the t4 tool."
-        return 0
+        exit
+    }
+}
+
+function checkMsbuild ()
+{
+    try { msbuild | Out-Null }
+    catch [System.Management.Automation.CommandNotFoundException] 
+    {
+        Write-Output "ERROR: Msbuild is not available, please ensure msbuild.exe is installed and added to the PATH Environment Variable."
+        exit
+    }
+}
+
+function check7zip ()
+{
+    if ((Test-Path "C:\Program Files\7-Zip") -eq 0)
+    {
+        Write-Output "ERROR: 7zip is not installed, please install 7zip and try again."
+        exit
     }
 }
 
@@ -55,14 +70,7 @@ function updateFNA ()
     else { Write-Output "ERROR: Unable to update." exit}
 }
 
-function check7zip ()
-{
-    if ((Test-Path "C:\Program Files\7-Zip") -eq 0)
-    {
-        Write-Output "ERROR: 7zip is not installed, please install 7zip and try again."
-        exit
-    }
-}
+
 
 function getLibs ()
 {
@@ -87,69 +95,6 @@ function getLibs ()
         else { Write-Output "ERROR: Unable to decompress successfully." exit }
     }
     
-}
-
-function checkMsbuild ()
-{
-    try { msbuild | Out-Null }
-    catch [System.Management.Automation.CommandNotFoundException] 
-    {
-        Write-Output "ERROR: 'msbuild' is not available. Attempting to look for build tools..."
-        if ((Test-Path "C:\Program Files (x86)\Microsoft Visual Studio") -eq 1) 
-        { 
-            $files = Get-ChildItem -Path "C:\Program Files (x86)\Microsoft Visual Studio\*" -Recurse -Include "msbuild.exe" | Where-Object { (Split-Path (Split-Path $_.FullName -Parent) -Leaf) -like 'bin'}
-            if ($files.Length -gt 0)
-            {
-                if ($files.Length -gt 1)
-                {
-                    Write-Output "Found multiple build tools... unsure which version to use."
-                    for ($i = 0; $i -lt $files.Length; $i++)
-                    {
-                        $filename = $files[$i].FullName
-                        $c = $i + 1
-                        Write-Output "${c}: ${filename}"
-                    }
-                    $max = $files.Length
-                    $choice = Read-Host -Prompt "Choose desired msbuild version? (1-${max})"
-                    if ($choice -le 0 -or $choice -gt $files.Length+1) 
-                    { 
-                        "ERROR: invalid choice, exiting"
-                    }
-
-                    $msbuildpath = Split-Path $files[$choice-1].FullName
-                    Write-Output "your choice was ${choice} which equals this path: ${msbuildpath}. attempting to add to PATH..."
-                    
-                    [Environment]::SetEnvironmentVariable("Path", $env:Path + $msbuildpath, "Machine")
-
-                    Write-Output "Close and run getFNA.ps1 again..."     
-                    exit          
-
-                }
-                else 
-                {
-                    Write-Output "Found build tools, attempting to add to PATH..."
-                    $msbuildpath = Split-Path $files[0].FullName
-                    
-                    [Environment]::SetEnvironmentVariable("Path", $env:Path + $msbuildpath, "Machine")
-
-                    Write-Output "Close and run getFNA.ps1 again..."   
-                    exit            
-                }
-            }
-            else 
-            {
-                Write-Output "ERROR: Build tools for Visual Studio not installed or installed in an unknown location."
-                Write-Output "If you know they are installed somewhere else, please create a PATH Environment Variable for them and retry."
-                exit  
-            }            
-        }
-        else 
-        {
-            Write-Output "ERROR: Build tools for Visual Studio not installed or installed in an unknown location."
-            Write-Output "If you know they are installed somewhere else, please create a PATH Environment Variable for them and retry."
-            exit
-        }
-    }
 }
 
 checkMsbuild
@@ -225,9 +170,11 @@ Set-Location Nez
 git submodule init
 git submodule update
 
-"Restoring and rebuilding..."
+"Restoring..."
 Set-Location $PSScriptRoot
 dotnet restore "Nez/Nez.sln"
+
+"Building..."
 msbuild "Nez/Nez.sln"
 msbuild -t:restore $newProjectName
 msbuild -t:buildcontent $newProjectName

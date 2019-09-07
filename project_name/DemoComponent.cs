@@ -6,31 +6,31 @@ namespace project_name
 {
     public class DemoComponent : Component
     {
-        int _buttonClickCounter;
+        int _ButtonClickCounter;
 
-        public override void onAddedToEntity()
+        public override void OnAddedToEntity()
         {
             // register with the ImGuiMangaer letting it know we want to render some IMGUI
 #if DEBUG
-            Core.getGlobalManager<ImGuiManager>().registerDrawCommand(imGuiDraw);
+            Core.GetGlobalManager<ImGuiManager>().RegisterDrawCommand(ImGuiDraw);
 #endif
         }
 
-        public override void onRemovedFromEntity()
+        public override void OnRemovedFromEntity()
         {
             // remove ourselves when we are removed from the Scene
 #if DEBUG
-            Core.getGlobalManager<ImGuiManager>().unregisterDrawCommand(imGuiDraw);
+            Core.GetGlobalManager<ImGuiManager>().UnregisterDrawCommand(ImGuiDraw);
 #endif
         }
 
-        void imGuiDraw()
+        void ImGuiDraw()
         {
             // do your actual drawing here
             ImGui.Begin("Your ImGui Window", ImGuiWindowFlags.AlwaysAutoResize);
             ImGui.Text("This is being drawn in DemoComponent");
-            if (ImGui.Button($"Clicked me {_buttonClickCounter} times"))
-                _buttonClickCounter++;
+            if (ImGui.Button($"Clicked me {_ButtonClickCounter} times"))
+                _ButtonClickCounter++;
             ImGui.End();
         }
 

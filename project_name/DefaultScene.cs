@@ -7,21 +7,21 @@ namespace project_name
 {
     public class DefaultScene : Scene
     {
-        public override void initialize()
+        public override void Initialize()
         {
-            setDesignResolution(Screen.width, Screen.height, Scene.SceneResolutionPolicy.None);
+            SetDesignResolution(Screen.Width, Screen.Height, Scene.SceneResolutionPolicy.None);
 
-            addRenderer(new DefaultRenderer());
+            AddRenderer(new DefaultRenderer());
 
-            createEntity("demo imgui draw commands")
-                .setPosition(new Vector2(150, 150))
-                .addComponent<DemoComponent>()
-                .addComponent(new PrototypeSprite(20, 20));
+            CreateEntity("demo imgui draw commands")
+                .SetPosition(new Vector2(150, 150))
+                .AddComponent<DemoComponent>()
+                .AddComponent(new PrototypeSprite(20, 20));
 
-            var logo = content.Load<Texture2D>("nez-logo-black");
-            createEntity("logo")
-                .setPosition(Screen.center)
-                .addComponent(new Nez.Sprites.Sprite(logo));
+            var Logo = Content.Load<Texture2D>("nez-logo-black");
+            CreateEntity("logo")
+                .SetPosition(Screen.center)
+                .AddComponent(new Nez.Sprites.Sprite(Logo));
         }
     }
 }
