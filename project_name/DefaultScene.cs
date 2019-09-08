@@ -20,7 +20,7 @@ namespace project_name
 
             var Logo = Content.Load<Texture2D>("nez-logo-black");
             CreateEntity("logo")
-                .SetPosition(Screen.center)
+                .SetPosition(Screen.Center)
                 .AddComponent(new Nez.Sprites.Sprite(Logo));
         }
     }
