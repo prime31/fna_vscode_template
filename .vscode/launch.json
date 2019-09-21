@@ -15,8 +15,8 @@
             "osx":{
                 "env": {
                     "DYLD_LIBRARY_PATH": "${workspaceFolder}/project_name/bin/Debug/osx/"
-                },
-            },
+                }
+            }
         },
 		
         {
@@ -28,7 +28,7 @@
             "osx":{
                 "env": {
                     "DYLD_LIBRARY_PATH": "${workspaceFolder}/project_name/bin/Debug/osx/"
-                },
+                }
             }
         },
 
@@ -38,12 +38,7 @@
             "request": "launch",
             "program": "${workspaceFolder}/project_name/bin/Debug/project_name.exe",
             "cwd": "${workspaceFolder}/project_name",
-            "preLaunchTask": "Build (Debug)",
-            "osx":{
-                "env": {
-                    "DYLD_LIBRARY_PATH": "${workspaceFolder}/project_name/bin/Debug/osx/"
-                },
-            }
+            "preLaunchTask": "Build (Debug)"
         },
 		
         {
@@ -51,12 +46,7 @@
             "type": "clr",
             "request": "launch",
             "program": "${workspaceFolder}/project_name/bin/Debug/project_name.exe",
-            "cwd": "${workspaceFolder}",
-            "osx":{
-                "env": {
-                    "DYLD_LIBRARY_PATH": "${workspaceFolder}/project_name/bin/Debug/osx/"
-                },
-            }
+            "cwd": "${workspaceFolder}"
         },
 
         {

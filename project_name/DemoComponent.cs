@@ -11,17 +11,13 @@ namespace project_name
         public override void OnAddedToEntity()
         {
             // register with the ImGuiMangaer letting it know we want to render some IMGUI
-#if DEBUG
-            Core.GetGlobalManager<ImGuiManager>().RegisterDrawCommand(ImGuiDraw);
-#endif
+            Core.GetGlobalManager<ImGuiManager>()?.RegisterDrawCommand(ImGuiDraw);
         }
 
         public override void OnRemovedFromEntity()
         {
             // remove ourselves when we are removed from the Scene
-#if DEBUG
-            Core.GetGlobalManager<ImGuiManager>().UnregisterDrawCommand(ImGuiDraw);
-#endif
+            Core.GetGlobalManager<ImGuiManager>()?.UnregisterDrawCommand(ImGuiDraw);
         }
 
         void ImGuiDraw()

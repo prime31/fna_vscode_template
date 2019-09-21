@@ -10,13 +10,13 @@ Start new FNA projects with Nez quickly and easily with handy setup scripts, a v
 
 
 ## Prerequisites ##
-- [Visual Studio Code](https://code.visualstudio.com) or [Visual Studio](https://visualstudio.microsoft.com/) (recommended to use Visual Studio Code because it has some custom tasks but either will work fine.)
+- [Visual Studio Code](https://code.visualstudio.com) or [Visual Studio](https://visualstudio.microsoft.com/) (recommended to use Visual Studio Code because it has some custom tasks but either will work fine)
 - [Mono Debugger Extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode.mono-debug) (required for macOS debugging)
 - [MonoGame](http://www.monogame.net/downloads/) (required for compiling content with the Pipeline tool)
 - (optional) [.NET Core](https://dotnet.microsoft.com/download) (required for compiling T4 templates)
 - (optional) [Microsoft DirectX SDK (June 2010)](https://www.microsoft.com/en-us/download/details.aspx?id=6812) (required for building effects, [you can use Wine to run this](https://github.com/AndrewRussellNet/FNA-Template#linuxmacos-installing-the-directx-sdk-on-wine))
 - (windows only) [7zip](https://www.7-zip.org) (if intending to use fnalibs, the filetype is unsupported for windows and requires 7zip to be installed to decompress/unzip)
-- (windows only) [Build tools for Visual Studio](https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=16)(these build tools are required for all Visual Studio Code build tasks. if you intend to use the full Visual Studio, these are already included. be sure to include .NET Core Build Tools in the installation)
+- (windows only) [Build tools for Visua Studio](https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=16)(these build tools are required for all Visual Studio Code build tasks. if you intend to use the full Visual Studio, these are already included. be sure to include .NET Core Build Tools in the installation)
 
 
 ## Setup Instructions ##
@@ -26,11 +26,11 @@ Start new FNA projects with Nez quickly and easily with handy setup scripts, a v
 
 That's it! Now you're ready to build and run the base project. If you get missing DLL errors (pointing at SDL) when running in Visual Studio copy the FNA libs into your `/usr/local/lib` folder. With Visual Studio Code, `DYLD_LIBRARY_PATH` is set automatically so it won't run into the DLL not found error. Nez is setup as a submodule so you can update it in the normal fashion.
 
-When developing, raw content (files not processed by the Pipeline tool) should be placed in the `Content` folder and anything that needs processing should go in the `CompiledContent` folder and added to the Pipeline tool.
+When developing, raw content (files not processed by the Pipeline tool) should be placed in the `Content` folders subfolders and anything that needs processing should go in the `CompiledContent` folder and added to the Pipeline tool.
 
 The setup process will also init a git repo for you with Nez added as a submodule.
 
-If you want to see the output of `Debug.*` calls in the VS Code Debug Console, you have to install a listener by adding this somewhere in your code (Game1 by default has one for you): `System.Diagnostics.Debug.Listeners.Add(new System.Diagnostics.TextWriterTraceListener(System.Console.Out));`
+If you want to see the output of `Debug.*` calls in the VS Code Debug Console, you have to install a listener by adding this somewhere in your code (Game1 by default has one for you): `System.Diagnostics.Debug.Listeners.Add(new System.Diagnostics.TextWriterTraceListener(System.Console.Out));` Pixel art games should also uncomment a line in the Game1.cs file setting the `FNA_OPENGL_BACKBUFFER_SCALE_NEAREST` environment variable when using FNA.
 
 
 ## Build Tasks ##

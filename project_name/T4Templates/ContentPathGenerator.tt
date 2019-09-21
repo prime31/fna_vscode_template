@@ -8,48 +8,75 @@
 <#@ import namespace="System.Globalization" #>
 <#@ import namespace="System.Text.RegularExpressions" #>
 
-<# var sourceFolders = new string[] { "CompiledContent/bin/DesktopGL", "Content" }; #>
-
-
 namespace Nez
 {
     public static class Content
     {
-<#
-
-	// loop through all of our sourceFolders
-	foreach( var sourceFolder in sourceFolders )
-	{
-		WriteLine( $"\t\t// folder: {sourceFolder}" );
-
-		// handle any files in the root sourceFolder
-		PrintContentFiles( sourceFolder, 2, sourceFolder );
-
-		// loop through all the directories in our sourceFolder
-		var directories = Directory.GetDirectories( sourceFolder );
-		foreach( var dir in directories )
+		public static class Nez
 		{
-			var dirName = new DirectoryInfo( dir ).Name.ToLower();
-			if( dirName == "bin" || dirName == "obj" || dirName == "content" )
-				continue;
-
-			// dont delve into directories that don't contan xnb files if this is the CompiledContent folder
-			if( !ShouldTraverseSubfolders( dir ) )
-				continue;
-
-			// start off the recursive directory printing
-			PrintDirectoryClass( dir, 2, sourceFolder );
+<# PrintNezContent(); #>
 		}
-	}
-#>
+
+		public static class Audio
+		{
+<# PrintAudio(); #>
+		}
+
+		public static class Fonts
+		{
+<# PrintFonts(); #>
+		}
+
+		public static class Materials
+		{
+<# PrintMaterials(); #>
+		}
+
+		public static class Particles
+		{
+<# PrintParticles(); #>
+		}
+
+		public static class Shaders
+		{
+<# PrintShaders(); #>
+		}
+
+		public static class Tilemaps
+		{
+<# PrintTilemaps(); #>
+		}
+
+		public static class Textures
+		{
+<# PrintTextures(); #>
+		}
+
+		public static class Atlases
+		{
+<# PrintAtlases(); #>
+		}
+
+		public static class Compiled
+		{
+<# PrintCompiledContent(); #>
+		}
+
     }
 }
 
 
 
 <#+
-	// all the valid file extensions we should add to the output file
-	private string[] fileExtensionsToCopy = new string[] { ".xnb", ".png", ".ogg", ".wav", ".fxb" };
+	// all the valid file extensions we should copy for each root folder
+	private string[] validAudioExtensions = new string[] { ".ogg", ".wav" };
+	private string[] validFontExtensions = new string[] { ".fnt" };
+	private string[] validMaterialExtensions = new string[] { ".mat" };
+	private string[] validParticleExtensions = new string[] { ".pex" };
+	private string[] validShaderExtensions = new string[] { ".fxb" };
+	private string[] validTilemapExtensions = new string[] { ".tmx" };
+	private string[] validTextureExtensions = new string[] { ".png", ".jpg" };
+	private string[] validAtlasExtensions = new string[] { ".atlas" };
 
 	// C# reserved keywords
 	private System.Collections.Generic.List<string> keywords = new System.Collections.Generic.List<string>
@@ -61,101 +88,170 @@ namespace Nez
 		"throw", "true", "try", "typeof", "uint", "ulong", "unchecked", "unsafe", "ushort", "using", "virtual", "void", "volatile", "while"
 	};
 
-	bool ShouldTraverseSubfolders( string path )
+	void PrintNezContent()
 	{
-		if( !path.Contains( "/bin/" ) )
+		PrintSpecialFolderAndSubfolders("../Nez/DefaultContent", new string[] { ".xnb", ".fxb" }, true);
+	}
+
+	void PrintAudio()
+	{
+		PrintSpecialFolderAndSubfolders("Content/Audio", validAudioExtensions);
+	}
+
+	void PrintFonts()
+	{
+		PrintSpecialFolderAndSubfolders("Content/Fonts", validFontExtensions);
+	}
+
+	void PrintMaterials()
+	{
+		PrintSpecialFolderAndSubfolders("Content/Materials", validMaterialExtensions);
+	}
+
+	void PrintParticles()
+	{
+		PrintSpecialFolderAndSubfolders("Content/Particles", validParticleExtensions);
+	}
+
+	void PrintShaders()
+	{
+		PrintSpecialFolderAndSubfolders("Content/Shaders", validShaderExtensions);
+	}
+
+	void PrintTextures()
+	{
+		PrintSpecialFolderAndSubfolders("Content/Textures", validTextureExtensions);
+	}
+
+	void PrintAtlases()
+	{
+		PrintSpecialFolderAndSubfolders("Content/Atlases", validAtlasExtensions);
+	}
+
+	void PrintTilemaps()
+	{
+		PrintSpecialFolderAndSubfolders("Content/Tilemaps", validTilemapExtensions);
+	}
+
+	void PrintCompiledContent()
+	{
+		PrintSpecialFolderAndSubfolders("CompiledContent/bin/DesktopGL", new string[] { ".xnb" }, true);
+	}
+
+	void PrintSpecialFolderAndSubfolders(string source, string[] validExtensions, bool isCompiledFolder = false)
+	{
+		var stripPath = isCompiledFolder ? source : "";
+		PrintContentFiles(source, 3, stripPath, validExtensions);
+
+		// loop through all the directories in our sourceFolder
+		foreach (var dir in Directory.GetDirectories(source))
 		{
-			return true;
+			var dirName = new DirectoryInfo(dir).Name.ToLower();
+			PrintDirectoryClass(dir, 3, stripPath, validExtensions, isCompiledFolder);
 		}
-		
-		return Directory.GetFiles( path, "*.xnb", SearchOption.AllDirectories ).Length > 0;
 	}
 
 	// recursively creates a class for each directory
-	void PrintDirectoryClass( string dir, int depth, string sourceFolder )
+	void PrintDirectoryClass(string dir, int depth, string sourceFolder, string[] validFileExtensions, bool isCompiledFolder)
 	{
-		var dirInfo = new DirectoryInfo( dir );
-		var firstIndent = new string( ' ', depth * 4 );
-		var className = GenerateClassName( dirInfo.Name );
-		WriteLine( "{0}public static class {1}\n{2}{{", firstIndent, className, firstIndent );
+		var dirInfo = new DirectoryInfo(dir);
+		var firstIndent = new string(' ', depth * 4);
+		var className = GenerateClassName(dirInfo.Name, true);
+
+		if (!FolderHasContent(dir, validFileExtensions))
+			return;
+
+		// fix our class name if this is the FNAEffects folder
+		if (dir.Contains("Nez/DefaultContent") && className == "FNAEffects")
+			className = "Effects";
+		WriteLine("{0}public static class {1}\n{2}{{", firstIndent, className, firstIndent);
 
 		// handle subdirectories
-		foreach( var subdir in Directory.GetDirectories( dir ) )
-			PrintDirectoryClass( subdir, depth + 1, sourceFolder );
+		foreach (var subdir in Directory.GetDirectories(dir))
+			PrintDirectoryClass(subdir, depth + 1, sourceFolder, validFileExtensions, isCompiledFolder);
 
 		// handle files
-		PrintContentFiles( dir, depth + 1, sourceFolder );
+		PrintContentFiles(dir, depth + 1, sourceFolder, validFileExtensions);
 
-		WriteLine( "{0}}}\n", firstIndent );
+		WriteLine("{0}}}\n", firstIndent);
 	}
 
-
 	// prints a const string for each file in the directory
-	void PrintContentFiles( string dir, int depth, string sourceFolder )
+	void PrintContentFiles(string dir, int depth, string sourceFolder, string[] validFileExtensions)
 	{
-		var firstIndent = new string( ' ', depth * 4 );
+		var firstIndent = new string('\t', depth);
 
-		var files = Directory.EnumerateFiles( dir )
-            	.Where( s => Array.IndexOf( fileExtensionsToCopy, Path.GetExtension( s ) ) >= 0 );
-		foreach( var file in files )
+		var files = Directory.EnumerateFiles(dir)
+            	.Where( s => Array.IndexOf(validFileExtensions, Path.GetExtension(s)) >= 0);
+		foreach (var file in files)
 		{
 			// clear out all of the path up to the sourceFolder so we get just the relative path to the Content folder
-			var finalPath = file.Substring( file.IndexOf( sourceFolder ) + sourceFolder.Length );
-			var fileInfo = new FileInfo( file );
+			var finalPath = file.Substring(file.IndexOf(sourceFolder) + sourceFolder.Length);
+			var fileInfo = new FileInfo(file);
 			var fileName = fileInfo.Name;
 
 			// clean the extension
-			foreach( var extension in fileExtensionsToCopy )
+			foreach (var extension in validFileExtensions)
+				fileName = fileName.Replace(extension, string.Empty);
+
+			var className = GenerateClassName(fileName, false);
+
+			if (finalPath[0] == '/' || finalPath[0] == '\\')
+				finalPath = finalPath.Substring(1);
+
+			// remove xnb extensions to avoid issues with loading
+			finalPath = finalPath.Replace(".xnb", string.Empty);
+
+			// deal with built-in Nez content pathing
+			if (dir.Contains("Nez/DefaultContent"))
 			{
-				fileName = fileName.Replace( extension, string.Empty );
+				if (dir.Contains("FNAEffects"))
+				{
+					finalPath = finalPath.Replace("FNAEffects", "Effects");
+					finalPath = "Content/Nez/" + finalPath;
+				}
+				else if(dir.Contains("Textures"))
+				{
+					finalPath = "Nez/" + finalPath;
+				}
 			}
 
-			var className = GenerateClassName( fileName );
-
-			if( finalPath[0] == '/' || finalPath[0] == '\\' )
-				finalPath = finalPath.Substring( 1 );
-
             // if file name is reserved insert a leading '@'
-			if( keywords.Contains( className ) )
+			if (keywords.Contains(className))
 				className = className.Insert( 0, "@" );
 
-			WriteLine( "{0}public const string {1} = @\"{2}\";", firstIndent, className, finalPath );
+			WriteLine("{0}public const string {1} = @\"{2}\";", firstIndent, className, finalPath);
 		}
 
-		if( files.Count() > 0 )
-		{
-			WriteLine( "" );
-		}
+		if (files.Count() > 0)
+			WriteLine("");
 	}
-
-
-	string StripInvalidPathChars( string input )
-	{
-		var invalidChars = Path.GetInvalidPathChars();
-    	return new string( input.Where( m => !invalidChars.Contains( m ) ).ToArray<char>() );
-	}
-
-
-	string StripInvalidFilenameChars( string input )
-	{
-		var invalidChars = Path.GetInvalidFileNameChars();
-    	return new string( input.Where( m => !invalidChars.Contains( m ) ).ToArray<char>() );
-	}
-
 
 	// attempts to generate a proper path name
-	string GenerateClassName( string className )
+	string GenerateClassName(string className, bool uppercaseFirstChar)
 	{
-	    className = char.ToUpper( className[0] ) + className.Substring( 1 );
+		// handle upper or lower casing the first char in the className
+	    if (uppercaseFirstChar && char.IsLower(className[0]))
+	    	className = char.ToUpper(className[0]) + className.Substring(1);
+
+		className = className.Replace("-", "_");
 
         // remove invalid characters
-        var regex = new Regex( @"[^\p{Ll}\p{Lu}\p{Lt}\p{Lo}\p{Nd}\p{Nl}\p{Mn}\p{Mc}\p{Cf}\p{Pc}\p{Lm}]" );
-        className = regex.Replace( className, "" );
+        var regex = new Regex(@"[^\p{Ll}\p{Lu}\p{Lt}\p{Lo}\p{Nd}\p{Nl}\p{Mn}\p{Mc}\p{Cf}\p{Pc}\p{Lm}]");
+        className = regex.Replace(className, "");
 
         // class name doesn't begin with a letter, insert an underscore
-        if( !char.IsLetter( className, 0 ) )
-            className = className.Insert( 0, "_" );
+        if (!char.IsLetter(className, 0))
+            className = className.Insert(0, "_");
 
-	    return className.Replace( " ", string.Empty );
+	    return className.Replace(" ", string.Empty);
+	}
+
+	// returns true if the folder or any subfolder has some content with a valid file extension
+	bool FolderHasContent(string dir, string[] validFileExtensions)
+	{
+		var files = Directory.EnumerateFiles(dir)
+            	.Where( s => Array.IndexOf(validFileExtensions, Path.GetExtension(s)) >= 0);
+		return files.Count() > 0;
 	}
 #>

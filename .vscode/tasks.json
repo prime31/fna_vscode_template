@@ -49,7 +49,6 @@
             ],
             "group": "build",
             "problemMatcher": "$msCompile",
-			"dependsOn": "Build Content",
         },
 
         {
@@ -77,7 +76,6 @@
                 "command": "start",
                 "args": [
                     "/wait",
-                    "${workspaceFolder}/project_name/bin/Debug/project_name.exe",
                     "${workspaceFolder}/project_name/bin/Debug/project_name.exe"
                 ]
             },
@@ -96,7 +94,6 @@
                 "command": "start",
                 "args": [
                     "/wait",
-                    "${workspaceFolder}/project_name/bin/Release/project_name.exe",
                     "${workspaceFolder}/project_name/bin/Release/project_name.exe"
                 ]
             },
@@ -120,51 +117,7 @@
             },
             "problemMatcher": "$msCompile"
         },
-		
-        {
-            "label": "Build Content",
-            "type": "shell",
-            "group": "build",
-            "command": "msbuild /t:BuildContent",
-            "options": {
-                "cwd": "${workspaceFolder}/project_name"
-            },
-            "problemMatcher": "$msCompile"
-        },
 
-        {
-            "label": "Force Build Content",
-            "type": "shell",
-            "group": "build",
-            "osx": {
-                "command": "mono /Applications/Pipeline.app/Contents/MonoBundle/MGCB.exe /@:Content.mgcb -r",
-            },
-            "windows": { 
-                "command":"C:/Program Files (x86)/MSBuild/MonoGame/v3.0/Tools/MGCB.exe", 
-                "args": [
-                    "/@:Content.mgcb",
-                    "-r"
-                ]
-            },
-            "options": {
-                "cwd": "${workspaceFolder}/project_name/CompiledContent"
-            },
-            "problemMatcher": "$msCompile"
-        },
-
-        {
-            "label": "Open Pipeline Tool",
-            "type": "shell",
-            "group": "build",
-            "osx": {
-                "command": "export MONOGAME_PIPELINE_PROJECT=${workspaceFolder}/project_name/CompiledContent/Content.mgcb && /Applications/Pipeline.app/Contents/MacOS/Pipeline"
-            },
-            "windows": {
-                "command": "${workspaceFolder}/project_name/CompiledContent/Content.mgcb"
-            },
-            "problemMatcher": "$msCompile"
-        },
-		
         {
             "label": "Process T4 Templates",
             "type": "shell",
