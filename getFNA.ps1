@@ -11,8 +11,9 @@ function checkDotnet()
     catch [System.Management.Automation.CommandNotFoundException]
     {
         Write-Output "ERROR: Dotnet is not installed. Please install dotnet to download the t4 tool."
-        exit
+        return 0;
     }
+    return 1;
 }
 
 function installT4 () 
