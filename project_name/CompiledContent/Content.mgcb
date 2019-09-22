@@ -1,0 +1,29 @@
+
+#----------------------------- Global Properties ----------------------------#
+
+/outputDir:bin/$(Platform)
+/intermediateDir:obj/$(Platform)
+/platform:DesktopGL
+/config:
+/profile:HiDef
+/compress:False
+
+#-------------------------------- References --------------------------------#
+
+/reference:../../Nez/Nez.PipelineImporter/bin/Debug/Newtonsoft.Json.dll
+/reference:../../Nez/Nez.PipelineImporter/bin/Debug/Nez.PipelineImporter.dll
+/reference:../../Nez/Nez.PipelineImporter/bin/Debug/Nez.dll
+
+#---------------------------------- Content ---------------------------------#
+
+#begin nez-logo-black.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:nez-logo-black.png
