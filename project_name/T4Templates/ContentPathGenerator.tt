@@ -140,6 +140,9 @@ namespace Nez
 
 	void PrintSpecialFolderAndSubfolders(string source, string[] validExtensions, bool isCompiledFolder = false)
 	{
+		if (!Directory.Exists(source))
+			return;
+
 		var stripPath = isCompiledFolder ? source : "";
 		PrintContentFiles(source, 3, stripPath, validExtensions);
 
