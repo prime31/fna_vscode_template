@@ -38,7 +38,7 @@
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
-    
+
     <!-- Include the CompiledContent bin (MGCB output). Copy it to the Content folder in the build. -->
     <ItemGroup>
         <Content Include="CompiledContent/bin/DesktopGL/**/*.xnb">
@@ -57,7 +57,6 @@
     </ItemGroup>
     
     <Import Project="../MonoGameContent.targets"/>
-    
     
     <PropertyGroup>
         <IsOSX Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' == 'true'">true</IsOSX>

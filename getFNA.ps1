@@ -11,6 +11,22 @@ function checkDotnet()
     catch [System.Management.Automation.CommandNotFoundException]
     {
         Write-Output "ERROR: Dotnet is not installed. Please install dotnet to download the t4 tool."
+        return 0;
+    }
+    return 1;
+}
+
+function installT4 () 
+{
+    if (checkDotnet) { Invoke-Expression 'dotnet tool install -g dotnet-t4' }
+}
+
+function checkGit () 
+{
+    try { git | Out-Null }
+    catch [System.Management.Automation.CommandNotFoundException] 
+    {
+        Write-Output "ERROR: Git is not installed. Please install git to download FNA."
         exit
     }
 }
@@ -30,21 +46,6 @@ function check7zip ()
     if ((Test-Path "C:\Program Files\7-Zip") -eq 0)
     {
         Write-Output "ERROR: 7zip is not installed, please install 7zip and try again."
-        exit
-    }
-}
-
-function installT4 () 
-{
-    if (checkDotnet) { Invoke-Expression 'dotnet tool install -g dotnet-t4' }
-}
-
-function checkGit () 
-{
-    try { git | Out-Null }
-    catch [System.Management.Automation.CommandNotFoundException] 
-    {
-        Write-Output "ERROR: Git is not installed. Please install git to download FNA."
         exit
     }
 }
@@ -101,23 +102,19 @@ checkMsbuild
 
 if (Test-Path "${PSScriptRoot}\FNA")
 {
-    #if ((Read-Host -Prompt "Update FNA (y/n)?") -like 'y') { $shouldUpdate = true }
     $shouldUpdate = Read-Host -Prompt "Update FNA (y/n)?"
 }
 else 
 {
-    #if ((Read-Host -Prompt "Download FNA (y/n)?") -like 'y') { $shouldDownload = true }
     $shouldDownload = Read-Host -Prompt "Download FNA (y/n)?"
 }
 
 if (Test-Path "${PSScriptRoot}\fnalibs")
 {
-    #if ((Read-Host -Prompt "Redownload fnalibs (y/n)?") -like 'y') { $shouldDownloadLibs = true }
     $shouldDownloadLibs = Read-Host -Prompt "Redownload fnalibs (y/n)?"
 }
 else 
 {
-    #if ((Read-Host -Prompt "Download fnalibs (y/n)?") -like 'y') { $shouldDownloadLibs = true }
     $shouldDownloadLibs = Read-Host -Prompt "Download fnalibs (y/n)?"
 }
 
@@ -177,5 +174,4 @@ dotnet restore "Nez/Nez.sln"
 "Building..."
 msbuild "Nez/Nez.sln"
 msbuild -t:restore $newProjectName
-msbuild -t:buildcontent $newProjectName
 msbuild "${newProjectName}.sln"

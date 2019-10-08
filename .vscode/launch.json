@@ -1,5 +1,5 @@
 {
-    // Change "mono" to "clr" for 64-bit .NET Framework debugging on Windows.
+    // Delete unnecessary configurations if unneeded. "type" isnt supported for platform specifc properties. 
     // (See: https://github.com/OmniSharp/omnisharp-vscode/wiki/Desktop-.NET-Framework)
 
     "version": "0.2.0",

@@ -49,7 +49,6 @@
             ],
             "group": "build",
             "problemMatcher": "$msCompile",
-			"dependsOn": "Build Content",
         },
 
         {
@@ -77,6 +76,7 @@
                 "command": "start",
                 "args": [
                     "/wait",
+                    "\"project_name.exe\"", //names the console window 
                     "${workspaceFolder}/project_name/bin/Debug/project_name.exe"
                 ]
             },
@@ -95,7 +95,8 @@
                 "command": "start",
                 "args": [
                     "/wait",
-                    "${workspaceFolder}/project_name/bin/Release/project_name.exe"
+                    "\"project_name.exe\"", //names the console window 
+                    "${workspaceFolder}/project_name/bin/Release/project_name.exe" 
                 ]
             },
             "dependsOn": "Build (Release)",
@@ -118,7 +119,7 @@
             },
             "problemMatcher": "$msCompile"
         },
-		
+
         {
             "label": "Build Content",
             "type": "shell",
@@ -162,7 +163,7 @@
             },
             "problemMatcher": "$msCompile"
         },
-		
+
         {
             "label": "Process T4 Templates",
             "type": "shell",
