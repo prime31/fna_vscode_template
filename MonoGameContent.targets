@@ -6,16 +6,20 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 	<PropertyGroup>
 		<MonoGameInstallDirectory
-			Condition=" '$(MonoGameInstallDirectory)' == '' And Exists('/Library/Frameworks/Mono.framework/External/xbuild/MonoGame/v3.0/MonoGame.Common.props') ">/Library/Frameworks/Mono.framework/External/xbuild</MonoGameInstallDirectory>
+			Condition=" '$(OS)' == 'Windows_NT' And '$(MonoGameInstallDirectory)' == '' And Exists('C:\Program Files (x86)\MSBuild\MonoGame\v3.0\MonoGame.Common.props') ">C:\Program Files (x86)\MSBuild</MonoGameInstallDirectory>
+        <MonoGameInstallDirectory
+            Condition=" '$(OS)' != 'Windows_NT' And '$(MonoGameInstallDirectory)' == '' And Exists('/Library/Frameworks/Mono.framework/External/xbuild/MonoGame/v3.0/MonoGame.Common.props') ">/Library/Frameworks/Mono.framework/External/xbuild</MonoGameInstallDirectory>
     	<MonoGameInstallDirectory
 			Condition=" '$(MonoGameInstallDirectory)' == '' ">$(MSBuildProgramFiles32)</MonoGameInstallDirectory>
 		<ContentOutputDir>bin/DesktopGL</ContentOutputDir>
 		<ContentIntermediateDir>obj/DesktopGL</ContentIntermediateDir>
 	</PropertyGroup>
 	
-    <UsingTask TaskName="MonoGame.Build.Tasks.CollectContentReferences" 
+    <UsingTask Condition=" '$(OS)' == 'Windows_NT' " TaskName="MonoGame.Build.Tasks.CollectContentReferences" 
+		AssemblyFile="C:\Program Files (x86)\MSBuild\MonoGame\v3.0\MonoGame.Build.Tasks.dll" />
+    <UsingTask Condition=" '$(OS)' != 'Windows_NT' " TaskName="MonoGame.Build.Tasks.CollectContentReferences" 
 		AssemblyFile="\Library\Frameworks\MonoGame.framework\v3.0\MonoGame.Build.Tasks.dll" />
-	
+
 	<!-- Add MonoGameContentReference to item type selection in Visual Studio -->
 	<ItemGroup>
 		<AvailableItemName Include="MonoGameContentReference" />
