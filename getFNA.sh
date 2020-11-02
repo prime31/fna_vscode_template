@@ -145,7 +145,7 @@ fi
 # any files that need to have project_name replaced with the new project name should be here
 files=(project_name.sln .gitignore project_name/project_name.csproj project_name/Game1.cs project_name/DemoComponent.cs project_name/DefaultScene.cs project_name/Program.cs .vscode/tasks.json .vscode/settings.json .vscode/launch.json .vscode/buildEffects.sh .vscode/processT4Templates.sh)
 for file in "${files[@]}"; do
-    sed -i '' "s/project_name/$newProjectName/g" $file
+    cat "$file" | sed "s/project_name/$newProjectName/g" | tee "$file" > /dev/null
 done
 
 mv project_name.sln "$newProjectName.sln"
