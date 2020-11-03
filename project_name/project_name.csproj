@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net471</TargetFramework>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <PlatformTarget>AnyCPU</PlatformTarget>
         <AssemblyName>project_name</AssemblyName>
@@ -10,16 +10,16 @@
         <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     </PropertyGroup>
-    
+
     <!-- Reference FNA, Nez, ImGui and Persistence projects. Optionally add a Farseer reference here and in the .sln file -->
     <ItemGroup>
-        <ProjectReference Include="../FNA/FNA.csproj"/>
-        <ProjectReference Include="../Nez/Nez.Portable/Nez.FNA.csproj"/>
+        <ProjectReference Include="../FNA/FNA.Core.csproj"/>
+        <ProjectReference Include="../Nez/Nez.Portable/Nez.FNA.Standard.csproj"/>
 		<ProjectReference Include="../Nez/Nez.Persistence/Nez.FNA.Persistence.csproj" />
         <ProjectReference Include="../Nez/Nez.ImGui/Nez.FNA.ImGui.csproj"/>
 		<!-- <ProjectReference Include="../Nez/Nez.FarseerPhysics/Nez.FNA.FarseerPhysics.csproj" /> -->
     </ItemGroup>
-    
+
     <!-- Includes Nez default effects and textures -->
     <ItemGroup>
         <Content Include="../Nez/DefaultContent/FNAEffects/**/*.fxb">
@@ -31,14 +31,14 @@
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
-    
+
     <!-- Include the Content directory (except for .fx files, since we use .fxb at runtime) -->
     <ItemGroup>
         <Content Include="Content/**/*.*" Exclude="**/*.fx; Content/Content-Goes-Here.txt">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
-    
+
     <!-- Include the CompiledContent bin (MGCB output). Copy it to the Content folder in the build. -->
     <ItemGroup>
         <Content Include="CompiledContent/bin/DesktopGL/**/*.xnb">
@@ -50,20 +50,21 @@
         <None Remove="CompiledContent\bin\**"/>
         <None Remove="CompiledContent\.*"/>
     </ItemGroup>
-    
-    <!-- MonoGames content pipeline needs this defined -->
+
+    <!-- optional: MonoGame's content pipeline needs this defined
     <ItemGroup>
         <MonoGameContentReference Include="CompiledContent\Content.mgcb"/>
     </ItemGroup>
-    
+
     <Import Project="../MonoGameContent.targets"/>
-    
-    
+    -->
+
+
     <PropertyGroup>
         <IsOSX Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' == 'true'">true</IsOSX>
         <IsLinux Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' == 'true'">true</IsLinux>
     </PropertyGroup>
-    
+
     <!-- Copy fnalib directories to output -->
     <ItemGroup>
         <Content Include="..\fnalibs\x86\**\*.*" Visible="false" Condition="'$(OS)' == 'Windows_NT' AND '$(Platform)' != 'x64'">

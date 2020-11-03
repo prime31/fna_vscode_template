@@ -4,7 +4,23 @@
 
     "version": "0.2.0",
     "configurations": [
-
+        {
+            "name": "Launch (dotnet)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "Build (Debug)",
+            "program": "${workspaceFolder}/project_name/bin/Debug/project_name.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/project_name",
+            "console": "internalConsole",
+            "stopAtEntry": false,
+            "internalConsoleOptions": "openOnSessionStart",
+            "osx":{
+                "env": {
+                    "DYLD_LIBRARY_PATH": "${workspaceFolder}/project_name/bin/Debug/osx/"
+                }
+            }
+        },
         {
             "name": "Launch (Mac)",
             "type": "mono",
@@ -18,7 +34,7 @@
                 }
             }
         },
-		
+
         {
             "name": "Launch Without Building (Mac)",
             "type": "mono",
@@ -40,7 +56,7 @@
             "cwd": "${workspaceFolder}/project_name",
             "preLaunchTask": "Build (Debug)"
         },
-		
+
         {
             "name": "Launch Without Building (Windows)",
             "type": "clr",

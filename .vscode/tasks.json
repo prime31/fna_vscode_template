@@ -2,13 +2,26 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "dotnet Build and Run (Debug)",
+            "type": "shell",
+            "group": "build",
+            "osx":{
+                "command": "dotnet ${workspaceFolder}/project_name/bin/Debug/project_name.dll",
+                "env": {
+                    "DYLD_LIBRARY_PATH": "${workspaceFolder}/project_name/bin/Debug/osx/"
+                },
+            },
+            "dependsOn": "Build (Debug)",
+            "problemMatcher": "$msCompile"
+        },
+        {
             "label": "Restore Project",
             "type": "shell",
             "command": "msbuild /t:restore",
             "group": "build",
             "problemMatcher": "$msCompile"
         },
-		
+
         {
             // this does a bunch of stuff:
             // - update submodules to lastest (fetch latest Nez version)
@@ -117,7 +130,7 @@
             },
             "problemMatcher": "$msCompile"
         },
-		
+
         {
             "label": "Build Content",
             "type": "shell",
@@ -136,8 +149,8 @@
             "osx": {
                 "command": "mono /Applications/Pipeline.app/Contents/MonoBundle/MGCB.exe /@:Content.mgcb -r",
             },
-            "windows": { 
-                "command":"C:/Program Files (x86)/MSBuild/MonoGame/v3.0/Tools/MGCB.exe", 
+            "windows": {
+                "command":"C:/Program Files (x86)/MSBuild/MonoGame/v3.0/Tools/MGCB.exe",
                 "args": [
                     "/@:Content.mgcb",
                     "-r"
@@ -161,7 +174,7 @@
             },
             "problemMatcher": "$msCompile"
         },
-		
+
         {
             "label": "Process T4 Templates",
             "type": "shell",
@@ -170,9 +183,9 @@
             },
             "windows": {
                 "command": "powershell",
-                "args": [ 
+                "args": [
                     "-File",
-                    "${workspaceFolder}/.vscode/processT4Templates.ps1" 
+                    "${workspaceFolder}/.vscode/processT4Templates.ps1"
                 ]
             },
             "group": "build",
