@@ -21,7 +21,9 @@ namespace project_name
 			Scene = new DefaultScene();
 
 #if DEBUG
-			// System.Diagnostics.Debug.Listeners.Add(new System.Diagnostics.TextWriterTraceListener(System.Console.Out));
+	#if NET47
+			System.Diagnostics.Debug.Listeners.Add(new System.Diagnostics.TextWriterTraceListener(System.Console.Out));
+	#endif
 
 			// optionally render Nez in an ImGui window
 			var imGuiManager = new ImGuiManager();

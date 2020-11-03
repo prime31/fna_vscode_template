@@ -5,12 +5,13 @@
             "label": "dotnet Build and Run (Debug)",
             "type": "shell",
             "group": "build",
-            "osx":{
-                "command": "dotnet ${workspaceFolder}/project_name/bin/Debug/project_name.dll",
+            "options": {
+                "cwd": "${workspaceFolder}/project_name",
                 "env": {
                     "DYLD_LIBRARY_PATH": "${workspaceFolder}/project_name/bin/Debug/osx/"
-                },
+                }
             },
+            "command": "dotnet ${workspaceFolder}/project_name/bin/Debug/project_name.dll",
             "dependsOn": "Build (Debug)",
             "problemMatcher": "$msCompile"
         },

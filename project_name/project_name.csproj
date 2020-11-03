@@ -15,8 +15,8 @@
     <ItemGroup>
         <ProjectReference Include="../FNA/FNA.Core.csproj"/>
         <ProjectReference Include="../Nez/Nez.Portable/Nez.FNA.Standard.csproj"/>
-		<ProjectReference Include="../Nez/Nez.Persistence/Nez.FNA.Persistence.csproj" />
-        <ProjectReference Include="../Nez/Nez.ImGui/Nez.FNA.ImGui.csproj"/>
+		<ProjectReference Include="../Nez/Nez.Persistence/Nez.FNA.Standard.Persistence.csproj" />
+        <ProjectReference Include="../Nez/Nez.ImGui/Nez.FNA.Standard.ImGui.csproj"/>
 		<!-- <ProjectReference Include="../Nez/Nez.FarseerPhysics/Nez.FNA.FarseerPhysics.csproj" /> -->
     </ItemGroup>
 
@@ -51,7 +51,7 @@
         <None Remove="CompiledContent\.*"/>
     </ItemGroup>
 
-    <!-- optional: MonoGame's content pipeline needs this defined
+    <!-- optional: MonoGame's content pipeline needs this defined. Uncomment if you intend to use it.
     <ItemGroup>
         <MonoGameContentReference Include="CompiledContent\Content.mgcb"/>
     </ItemGroup>

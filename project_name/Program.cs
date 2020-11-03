@@ -75,7 +75,7 @@ namespace project_name
             {
                 Console.WriteLine($"----- no case for library load: {libraryName} ---------");
             }
-            Console.WriteLine($"----- no case for library load: {libHandle} ---------");
+
 			return libHandle;
 		}
 	}
