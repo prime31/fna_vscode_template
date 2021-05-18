@@ -97,6 +97,23 @@ function getLibs ()
     
 }
 
+function del-line($file, $start, $end) {
+    $i = 0
+    $start--
+    $end--
+    (Get-Content $file) | where{
+        ($i -lt $start -or $i -gt $end)
+        $i++
+    } > $file
+    (Get-Content $file)
+}
+
+function add-line($filePath, $textToAdd, $lineNumber) {
+    $fileContent = (Get-Content $filePath)
+    $fileContent[$lineNumber-1] += $textToAdd
+    $fileContent | Set-Content $filePath
+}
+
 checkMsbuild
 
 if (Test-Path "${PSScriptRoot}\FNA")
@@ -170,6 +187,17 @@ Set-Location Nez
 git submodule init
 git submodule update
 
+# Remove MonoGame pipeline include line.
+del-line "${PSScriptRoot}\$newProjectName\$newProjectName.csproj" 54 58
+
+# Add properties to fix errors.
+add-line "${PSScriptRoot}\Nez\Nez.Portable\Nez.FNA.csproj" "`n`t`t<GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>" 18
+add-line "${PSScriptRoot}\Nez\Nez.Persistence\Nez.FNA.Persistence.csproj" "`n`t`t<GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>" 17
+add-line "${PSScriptRoot}\Nez\Nez.ImGui\Nez.FNA.ImGui.csproj" "`n`t`t<GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>" 17
+
+# Remove Nez logo entity
+del-line "${PSScriptRoot}\$newProjectName\DefaultScene.cs" 18 22
+
 "Restoring..."
 Set-Location $PSScriptRoot
 dotnet restore "Nez/Nez.sln"
@@ -179,3 +207,5 @@ msbuild "Nez/Nez.sln"
 msbuild -t:restore $newProjectName
 msbuild -t:buildcontent $newProjectName
 msbuild "${newProjectName}.sln"
+
+read-host “Press ENTER to exit...”
