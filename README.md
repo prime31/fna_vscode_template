@@ -1,4 +1,4 @@
-# Fixed FNA VSCode Template
+# FNA VSCode Template
 Start new FNA projects with Nez quickly and easily with handy setup scripts, a versatile boilerplate project, and convenient Visual Studio Code integration.
 
 
