@@ -195,9 +195,6 @@ add-line "${PSScriptRoot}\Nez\Nez.Portable\Nez.FNA.csproj" "`n`t`t<GenerateTarge
 add-line "${PSScriptRoot}\Nez\Nez.Persistence\Nez.FNA.Persistence.csproj" "`n`t`t<GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>" 17
 add-line "${PSScriptRoot}\Nez\Nez.ImGui\Nez.FNA.ImGui.csproj" "`n`t`t<GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>" 17
 
-# Remove Nez logo entity
-del-line "${PSScriptRoot}\$newProjectName\DefaultScene.cs" 18 22
-
 "Restoring..."
 Set-Location $PSScriptRoot
 dotnet restore "Nez/Nez.sln"
