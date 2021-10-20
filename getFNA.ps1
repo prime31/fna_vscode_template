@@ -4,6 +4,10 @@
 # Usage: ./getFNA.sh
 # Description: Quick and easy way to install a local copy of FNA and its native libraries.
 
+
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+
+
 # Checks if dotnet is installed
 function checkDotnet() 
 {
