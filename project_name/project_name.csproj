@@ -56,9 +56,6 @@
         <MonoGameContentReference Include="CompiledContent\Content.mgcb"/>
     </ItemGroup>
     
-    <Import Project="../MonoGameContent.targets"/>
-    
-    
     <PropertyGroup>
         <IsOSX Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' == 'true'">true</IsOSX>
         <IsLinux Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' == 'true'">true</IsLinux>
